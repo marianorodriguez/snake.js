@@ -33,26 +33,33 @@ const Model = (function() {
     Model.prototype.getMatrix = function() {
         return this.matrix;
     }
+
+    Model.prototype.canAdvance = function(code) {
+        return (
+            code === 'ArrowUp' && this.lastDirection !== 'ArrowDown'
+            || code === 'ArrowDown' && this.lastDirection !== 'ArrowUp'
+            || code === 'ArrowRight' && this.lastDirection !== 'ArrowLeft'
+            || code === 'ArrowLeft' && this.lastDirection !== 'ArrowRight'
+            )
+    }
     
     Model.prototype.advance = function (direction) {
         const [lastX, lastY] = this.actualPosition;
-        if(direction === 'ArrowUp' && this.lastDirection !== 'ArrowDown') {
+        this.matrix.data[lastX][lastY] = this.cellTypes.EMPTY;
+        if(direction === 'ArrowUp') {
             this.actualPosition[0] -= 1;
         }
-        if(direction === 'ArrowDown' && this.lastDirection !== 'ArrowUp') {
+        if(direction === 'ArrowDown') {
             this.actualPosition[0] += 1;
         }
-        if(direction === 'ArrowLeft' && this.lastDirection !== 'ArrowRight') {
+        if(direction === 'ArrowLeft') {
             this.actualPosition[1] -= 1;
         }
-        if(direction === 'ArrowRight' && this.lastDirection !== 'ArrowLeft') {
+        if(direction === 'ArrowRight') {
             this.actualPosition[1] += 1;
         }
-        this.matrix.data[lastX][lastY] = this.cellTypes.EMPTY;
         this.matrix.data[this.actualPosition[0]][this.actualPosition[1]] = this.cellTypes.SNAKE_HEAD;
-        if(lastX !== this.actualPosition[0] || lastY !== this.actualPosition[1]) {
-            this.lastDirection = direction;
-        }
+        this.lastDirection = direction;
         this.matrix.updated.notify();
     }
     return Model;
