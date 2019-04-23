@@ -1,0 +1,18 @@
+table {
+    margin: 10px;
+    border: 1px solid black;
+}
+td {
+    border: 1px solid black;
+    width: 5px;
+    height: 5px;
+}
+td.empty {
+    background: white;
+}
+td.snake-head, td.snake-body {
+    background: blue;
+}
+td.dot {
+    background: green;
+}
