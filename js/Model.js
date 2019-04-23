@@ -27,5 +27,9 @@ const Model = (function() {
     Model.prototype.getMatrix = function() {
         return this.matrix;
     }
+
+    Model.prototype.advance = function (direction) {
+        console.log(direction);
+    }
     return Model;
 })();
