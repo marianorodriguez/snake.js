@@ -9,6 +9,7 @@ const View = (function() {
         this.matrix = matrix;
         this.rows = matrix.data.length;
         this.cols = matrix.data[0].length;
+        Game.statusEvent.attach(this.statusChange.bind(this));
         this.matrix.updated.attach(this.matrixUpdated.bind(this));
         
         const boardElm = document.getElementById('board');
@@ -23,6 +24,16 @@ const View = (function() {
             }
         }
     }
+    View.prototype.statusChange = function(source, status) {
+        if (status === GameStatus.PAUSED) {
+            this.table.className = 'paused';
+        } else if (status === GameStatus.PLAYING) {
+            this.table.className = 'playing';
+        } else if (status === GameStatus.LOST) {
+            this.table.className = 'lost';
+        }
+    }
+
     View.prototype.matrixUpdated = function() {
         for(let x = 0; x < this.rows; x++) {
             for(let y = 0; y < this.cols; y++) {

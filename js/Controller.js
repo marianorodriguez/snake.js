@@ -6,7 +6,9 @@ const Controller = (function(){
   function Controller(model) {
     this.model = model;
     this.interval = setInterval(() => {
-      this.model.advance(this.lastKeyDown);
+      if(this.model.canAdvance(this.lastKeyDown)) {
+        this.model.advance(this.lastKeyDown);
+      }
     }, this.intervalTimeMS);
 
     document.addEventListener('keydown', (e) => {

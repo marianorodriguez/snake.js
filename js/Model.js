@@ -35,11 +35,12 @@ const Model = (function() {
     }
 
     Model.prototype.canAdvance = function(code) {
-        return (
-            code === 'ArrowUp' && this.lastDirection !== 'ArrowDown'
-            || code === 'ArrowDown' && this.lastDirection !== 'ArrowUp'
-            || code === 'ArrowRight' && this.lastDirection !== 'ArrowLeft'
-            || code === 'ArrowLeft' && this.lastDirection !== 'ArrowRight'
+        return Game.status === GameStatus.PLAYING &&
+            (
+                code === 'ArrowUp' && this.lastDirection !== 'ArrowDown'
+                || code === 'ArrowDown' && this.lastDirection !== 'ArrowUp'
+                || code === 'ArrowRight' && this.lastDirection !== 'ArrowLeft'
+                || code === 'ArrowLeft' && this.lastDirection !== 'ArrowRight'
             )
     }
     
