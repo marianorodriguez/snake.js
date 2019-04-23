@@ -12,25 +12,26 @@ const Game = {
     gameSpeed: 800,
     start() {
         if (this.status === GameStatus.PAUSED) {
-            this.status = GameStatus.PLAYING;
-            this.statusEvent.notify(this.status);
+            this.changeStatus(GameStatus.PLAYING);
             return;
         }
         this.initGame();
-        this.status = GameStatus.PLAYING;
-        this.statusEvent.notify(this.status);
+        this.changeStatus(GameStatus.PLAYING);
     },
     togglePause() {
         if(this.status === GameStatus.PLAYING) {
-            this.status = GameStatus.PAUSED;
+            this.changeStatus(GameStatus.PAUSED);
         } else {
-            this.status = GameStatus.PLAYING;
+            this.changeStatus(GameStatus.PLAYING);
         }
-        this.statusEvent.notify(this.status);
     },
     initGame() {
         this.model = new Model(50, 50);
         this.view = new View(this.model.getMatrix());
         this.controller = new Controller(this.model);
     },
+    changeStatus(status) {
+        this.status = status;
+        this.statusEvent.notify(this.status);
+    }
 }
