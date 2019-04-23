@@ -59,9 +59,21 @@ const Model = (function() {
         if(direction === 'ArrowRight') {
             this.actualPosition[1] += 1;
         }
+        this.verifyGameStatus();
         this.matrix.data[this.actualPosition[0]][this.actualPosition[1]] = this.cellTypes.SNAKE_HEAD;
         this.lastDirection = direction;
-        this.matrix.updated.notify();
+        if(Game.status === GameStatus.PLAYING) {
+            this.matrix.updated.notify();
+        }
     }
+    Model.prototype.verifyGameStatus = function() {
+        if(
+            this.actualPosition[0] < 0 || this.actualPosition[0] >= this.rows
+            || this.actualPosition[1] < 0 || this.actualPosition[1] >= this.cols
+        ) {
+            Game.changeStatus(GameStatus.LOST);
+        }
+    }
+
     return Model;
 })();
