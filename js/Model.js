@@ -60,9 +60,9 @@ const Model = (function() {
             this.actualPosition[1] += 1;
         }
         this.verifyGameStatus();
-        this.matrix.data[this.actualPosition[0]][this.actualPosition[1]] = this.cellTypes.SNAKE_HEAD;
-        this.lastDirection = direction;
         if(Game.status === GameStatus.PLAYING) {
+            this.matrix.data[this.actualPosition[0]][this.actualPosition[1]] = this.cellTypes.SNAKE_HEAD;
+            this.lastDirection = direction;
             this.matrix.updated.notify();
         }
     }

@@ -14,10 +14,13 @@
 
 <h1>Snake.js</h1>
 
-<button onclick="Game.start();">Start</button>
-<button onclick="Game.togglePause();">Pause/Resume</button>
+<button onclick="Game.togglePause();">Play / Pause</button>
+<button onclick="location.href = location.href">Restart</button>
 
 <div id="board"></div>
 
+<script>
+	Game.initGame();
+</script>
 </body>
 </html>
