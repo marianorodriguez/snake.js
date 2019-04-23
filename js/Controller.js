@@ -1,7 +1,7 @@
 const Controller = (function(){
 
   Controller.prototype.lastKeyDown = 'ArrowUp';
-  Controller.prototype.intervalTimeMS = 800;
+  Controller.prototype.intervalTimeMS = 400;
 
   function Controller(model) {
     this.model = model;
