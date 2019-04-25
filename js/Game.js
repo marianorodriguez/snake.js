@@ -1,5 +1,4 @@
 const GameStatus = {
-    'IDLE': 0,
     'PLAYING': 1,
     'PAUSED': 2,
     'LOST': 3,
