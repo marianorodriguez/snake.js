@@ -15,18 +15,17 @@ const Model = (function() {
             data: new Array(this.rows),
             updated: new GameEvent(this),
         }
-        for (let x=0; x < this.rows; x++) {
-            this.matrix.data[x] = new Array(this.cols);
-        }
-        
-        for (let x=0; x < this.rows; x++) {
-            for (let y=0; y < this.cols; y++) {
-                this.matrix.data[x][y] = this.cellTypes.EMPTY
-            }
-        }
+        this.clearMatrix();
 
         this.actualPosition = [Math.floor(rows / 2), Math.floor(cols / 2)];
         this.matrix.data[this.actualPosition[0]][this.actualPosition[1]] = this.cellTypes.SNAKE_HEAD;
+        
+        this.tailLength = 2;
+        this.tailPosition = [];
+        for (let i = 0; i < this.tailLength; i++) {
+            this.tailPosition.push([this.actualPosition[0] + i + 1, this.actualPosition[1]]);
+            this.matrix.data[this.actualPosition[0] + i + 1][this.actualPosition[1]] = this.cellTypes.SNAKE_BODY;
+        }
         
         this.dotPosition = this.getRandomEmptyPosition();
         this.matrix.data[this.dotPosition[0]][this.dotPosition[1]] = this.cellTypes.DOT;
@@ -40,6 +39,17 @@ const Model = (function() {
         } while (this.matrix.data[ranX][ranY] !== this.cellTypes.EMPTY);
 
         return [ranX, ranY];
+    }
+    Model.prototype.clearMatrix = function() {
+        for (let x=0; x < this.rows; x++) {
+            this.matrix.data[x] = new Array(this.cols);
+        }
+        
+        for (let x=0; x < this.rows; x++) {
+            for (let y=0; y < this.cols; y++) {
+                this.matrix.data[x][y] = this.cellTypes.EMPTY
+            }
+        }
     }
 
     Model.prototype.getMatrix = function() {
@@ -57,37 +67,66 @@ const Model = (function() {
     }
     
     Model.prototype.advance = function (direction) {
-        const [lastX, lastY] = this.actualPosition;
-        this.matrix.data[lastX][lastY] = this.cellTypes.EMPTY;
-        if(direction === 'ArrowUp') {
-            this.actualPosition[0] -= 1;
-        }
-        if(direction === 'ArrowDown') {
-            this.actualPosition[0] += 1;
-        }
-        if(direction === 'ArrowLeft') {
-            this.actualPosition[1] -= 1;
-        }
-        if(direction === 'ArrowRight') {
-            this.actualPosition[1] += 1;
-        }
+        const lastHeadPosition = Object.assign([], this.actualPosition);
+        this.actualPosition = this.calculateMovement(this.actualPosition, direction);
         this.verifyGameStatus();
         if(Game.status === GameStatus.PLAYING) {
+            this.clearMatrix();
+            
             this.matrix.data[this.actualPosition[0]][this.actualPosition[1]] = this.cellTypes.SNAKE_HEAD;
+
+            this.tailPosition = this.calculateTailPosition(lastHeadPosition);
+            this.tailPosition.forEach(position => {
+                this.matrix.data[position[0]][position[1]] = this.cellTypes.SNAKE_BODY;
+            });
+
             this.matrix.data[this.dotPosition[0]][this.dotPosition[1]] = this.cellTypes.DOT;
+            
             this.lastDirection = direction;
             this.matrix.updated.notify();
         }
     }
+
+    Model.prototype.calculateMovement = function(position, direction) {
+        if(direction === 'ArrowUp') {
+            position[0] -= 1;
+        }
+        if(direction === 'ArrowDown') {
+            position[0] += 1;
+        }
+        if(direction === 'ArrowLeft') {
+            position[1] -= 1;
+        }
+        if(direction === 'ArrowRight') {
+            position[1] += 1;
+        }
+        return position;
+    }
+    Model.prototype.calculateTailPosition = function(lastHeadPosition) {
+        let to = lastHeadPosition;
+        for(let i = 0; i < this.tailPosition.length; i ++) {
+            const tmpPosition = Object.assign([], this.tailPosition[i]);
+            this.tailPosition[i] = lastHeadPosition;
+            lastHeadPosition = tmpPosition;
+        }
+        if(this.tailLength > this.tailPosition.length) {
+            this.tailPosition.push(lastHeadPosition);
+        }
+        return this.tailPosition;
+    }
+
     Model.prototype.verifyGameStatus = function() {
+        const [actualX, actualY] = this.actualPosition;
         if(
-            this.actualPosition[0] < 0 || this.actualPosition[0] >= this.rows
-            || this.actualPosition[1] < 0 || this.actualPosition[1] >= this.cols
+            actualX < 0 || actualX >= this.rows
+            || actualY < 0 || actualY >= this.cols
+            || this.matrix.data[actualX][actualY] === this.cellTypes.SNAKE_BODY
         ) {
             Game.changeStatus(GameStatus.LOST);
         }
 
         if(this.actualPosition[0] === this.dotPosition[0] && this.actualPosition[1] === this.dotPosition[1]) {
+            this.tailLength += 1;
             this.dotPosition = this.getRandomEmptyPosition();
         }
     }
