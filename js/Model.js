@@ -15,6 +15,7 @@ const Model = (function() {
             data: new Array(this.rows),
             updated: new GameEvent(this),
         }
+        this.dotEaten = new GameEvent(this);
         this.clearMatrix();
 
         this.actualPosition = [Math.floor(rows / 2), Math.floor(cols / 2)];
@@ -128,6 +129,7 @@ const Model = (function() {
         if(this.actualPosition[0] === this.dotPosition[0] && this.actualPosition[1] === this.dotPosition[1]) {
             this.tailLength += 1;
             this.dotPosition = this.getRandomEmptyPosition();
+            this.dotEaten.notify();
         }
     }
 
