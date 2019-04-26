@@ -14,8 +14,9 @@ const Controller = (function(){
   }
 
   Controller.prototype.onDotEaten = function() {
-    if(++this.dotsEaten % 3 === 0) {
-      this.intervalTimeMS -= 25;
+    this.dotsEaten++;
+    if(this.dotsEaten % 2 === 0 && this.intervalTimeMS > 50) {
+      this.intervalTimeMS *= 0.95;
       this.resetInterval();
     }
   }
