@@ -13,8 +13,14 @@ const Controller = (function(){
 
     document.addEventListener('keydown', (e) => {
       if(this.model.canAdvance(e.code)) {
+        clearInterval(this.interval);
         this.lastKeyDown = e.code;
         this.model.advance(this.lastKeyDown);
+        this.interval = setInterval(() => {
+          if(this.model.canAdvance(this.lastKeyDown)) {
+            this.model.advance(this.lastKeyDown);
+          }
+        }, this.intervalTimeMS);
       }
     }, false);
   }
