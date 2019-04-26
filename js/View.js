@@ -5,12 +5,13 @@ const View = (function() {
         2: 'snake-body',
         3: 'dot',
     }
-    function View(matrix) {
-        this.matrix = matrix;
-        this.rows = matrix.data.length;
-        this.cols = matrix.data[0].length;
+    function View(model) {
+        this.matrix = model.matrix;
+        this.rows = this.matrix.data.length;
+        this.cols = this.matrix.data[0].length;
         Game.statusEvent.attach(this.statusChange.bind(this));
         this.matrix.updated.attach(this.matrixUpdated.bind(this));
+        model.dotEaten.attach(this.dotEaten.bind(this));
         
         const boardElm = document.getElementById('board');
         this.table = document.createElement('table');
@@ -41,5 +42,11 @@ const View = (function() {
             }
         }
     }
+    let score = 0;
+    View.prototype.dotEaten = function() {
+        score += 10;
+        document.getElementById('score').innerText = score;
+    }
+
     return View;
 })();
