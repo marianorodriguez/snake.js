@@ -1,5 +1,5 @@
 const Model = (function() {
-    Model.prototype.lastDirection = null;
+    Model.prototype.lastDirection = 'ArrowUp';
     
     Model.prototype.cellTypes = {
         EMPTY: 0,
