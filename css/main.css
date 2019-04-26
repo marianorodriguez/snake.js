@@ -10,8 +10,8 @@ table.lost {
     background: red;
 }
 td {
-    width: 6px;
-    height: 6px;
+    width: 10px;
+    height: 10px;
 }
 td.empty {
     background: white;

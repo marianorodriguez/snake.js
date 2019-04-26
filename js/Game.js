@@ -22,7 +22,7 @@ const Game = {
         }
     },
     initGame() {
-        this.model = new Model(30, 30);
+        this.model = new Model(25, 25);
         this.view = new View(this.model.getMatrix());
         this.controller = new Controller(this.model);
         this.model.getMatrix().updated.notify();
