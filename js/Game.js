@@ -8,7 +8,6 @@ const Game = {
     status: GameStatus.PAUSED,
     statusEvent: new GameEvent(this),
     interval: null,
-    gameSpeed: 800,
     start() {
         if (this.status === GameStatus.PAUSED) {
             this.changeStatus(GameStatus.PLAYING);
@@ -25,7 +24,7 @@ const Game = {
         this.model = new Model(25, 25);
         this.view = new View(this.model);
         this.controller = new Controller(this.model);
-        this.model.getMatrix().updated.notify();
+        this.model.matrix.updated.notify();
         this.changeStatus(GameStatus.PLAYING);
     },
     changeStatus(status) {

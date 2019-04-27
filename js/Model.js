@@ -53,10 +53,6 @@ const Model = (function() {
         }
     }
 
-    Model.prototype.getMatrix = function() {
-        return this.matrix;
-    }
-
     Model.prototype.canAdvance = function(code) {
         return Game.status === GameStatus.PLAYING &&
             (
